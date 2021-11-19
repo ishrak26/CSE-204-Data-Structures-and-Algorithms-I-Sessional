@@ -1,12 +1,14 @@
 #include<iostream>
 #include "LL.cpp"
+#include "Arr.cpp"
 
 using namespace std;
 
 int main() {
     int k, x;
     cin >> k >> x;
-    LinkedList<int> foo;
+//    LinkedList<int> foo;
+    Array<int> foo;
     for (int i = 0; i < k; i++) {
         int val;
         cin >> val;
@@ -14,7 +16,8 @@ int main() {
         foo.append(val);
     }
 //    foo.printList();
-    LinkedList<int> L(foo);
+//    LinkedList<int> L(foo);
+    Array<int> L(foo);
     L.printList();
 
     int q, p;

@@ -1,3 +1,6 @@
+#ifndef _LIST_H
+#define _LIST_H
+
 template <typename E>
 class List {
 public:
@@ -15,3 +18,5 @@ public:
     virtual E getValue() = 0;
     virtual int Search(const E &item) = 0;
 };
+
+#endif // _LIST_H
