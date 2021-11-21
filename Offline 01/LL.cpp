@@ -10,10 +10,12 @@ class LinkedList : public List<E> {
     public:
         E val;
         Node *next;
+        Node *prev;
 
-        Node(const E &val, Node *next = NULL) {
+        Node(const E &val, Node *next = NULL, Node *prev = NULL) {
             this->val = val;
             this->next = next;
+            this->prev = prev;
         }
     };
 
@@ -24,19 +26,19 @@ class LinkedList : public List<E> {
     int pos;
 
     void init() {
-        head = new Node(-1);
-        tail = head;
-        curr = head;
+        head = tail = curr = NULL;
         size = 0;
         pos = 0;
     }
 
     void removeCurr() {
-        if (curr->next == NULL) return;
-        if (curr->next == tail) tail = curr;
-        Node *tmp = curr->next->next;
-        delete curr->next;
-        curr->next = tmp;
+        assert(curr != NULL);
+        if (curr->prev != NULL) curr->prev->next = curr->next;
+        if (curr->next != NULL) curr->next->prev = curr->prev;
+        if (tail == curr) tail = curr->prev;
+        Node *tmp = curr;
+        curr = curr->next;
+        delete tmp;
         --size;
     }
 
@@ -54,32 +56,39 @@ public:
 
     ~LinkedList() {
         clear();
-        delete head;
     }
 
     void clear() {
         moveToStart();
-        while (tail != head) removeCurr();
+        while (head != NULL) removeCurr();
     }
 
     void insert(const E &item) {
-        Node *tmp = new Node(item, curr->next);
-        curr->next = tmp;
-        if (curr == tail) tail = tail->next;
+        if (size == 0) {
+            head = tail = curr = new Node(item);
+        }
+        else {
+            curr->next = new Node(item, curr->next, curr);
+            if (tail == curr) tail = tail->next;
+        }
         ++size;
     }
 
     void append(const E &item) {
-        Node *tmp = new Node(item);
-        tail->next = tmp;
-        tail = tail->next;
+        if (size == 0) {
+            head = tail = curr = new Node(item);
+        }
+        else {
+            tail->next = new Node(item, tail->next, tail);
+            tail = tail->next;
+        }
         ++size;
     }
 
     // Remove and return the current element
     E remove() {
-        assert(curr->next != NULL);
-        E item = curr->next->val;
+        assert(curr != NULL);
+        E item = curr->val;
         removeCurr();
         return item;
     }
@@ -90,68 +99,69 @@ public:
     }
 
     void moveToEnd() {
+        assert(size > 0);
         curr = tail;
-        pos = size;
+        pos = size - 1;
     }
 
     void prev() {
         if (curr == head) return;
-        Node *tmp = head;
-        while (tmp->next != curr) {
-            tmp = tmp->next;
-        }
-        curr = tmp;
+        curr = curr->prev;
         --pos;
     }
 
+    // allows traversal up to size position (n)
     void next() {
-        if (curr->next == NULL) return;
+        if (curr == NULL) return;
         curr = curr->next;
         ++pos;
     }
 
     int length() { return size; }
 
-    int currPos() {
-        return pos;
-    }
+    int currPos() { return pos; }
 
     void moveToPos(int pos) {
-        assert(pos >= 0 && pos <= size);
-        if (pos < this->pos) moveToStart();
-        else pos -= this->pos;
-        for (int i = 0; i < pos; i++) {
-            curr = curr->next;
-            ++this->pos;
+        assert(pos >= 0 && pos < size);
+        if (pos < this->pos) {
+            if (pos + 1 < this->pos - pos) {
+                // traverse right from head
+                moveToStart();
+                while (this->pos != pos) next();
+            }
+            else {
+                // traverse left from curr
+                while (this->pos != pos) prev();
+            }
         }
+        else {
+            if (size - pos < pos - this->pos) {
+                // traverse left from tail
+                moveToEnd();
+                while (this->pos != pos) prev();
+            }
+            else {
+                // traverse right from curr
+                while (this->pos != pos) next();
+            }
+        }
+        assert(pos == this->pos);
     }
 
     E getValue() {
-        assert(curr->next != NULL);
-        return curr->next->val;
+        assert(curr != NULL);
+        return curr->val;
     }
 
     // returns the position of the element item or -1 if not found
     int Search(const E &item) {
-        Node *tmp = head->next;
-        for (int i = 0; tmp->next != NULL; i++) {
-            if (tmp->val == item) return i;
-            tmp = tmp->next;
+        Node *tmp = head;
+        for (int i = 0; tmp != NULL; i++) {
+            if (tmp->val == item) {
+                assert(i >= 0 && i < size);
+                return i;
+            }
         }
         return -1;
-    }
-
-    void printList() {
-        Node *tmp = head->next;
-        while (tmp != curr->next) {
-            cout << tmp->val << " ";
-            tmp = tmp->next;
-        }
-        cout << "|";
-        while (tmp != NULL) {
-            cout << " " << tmp->val;
-            tmp = tmp->next;
-        }
-        cout << "\n";
     }
 };
