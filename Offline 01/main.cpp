@@ -4,79 +4,93 @@
 
 using namespace std;
 
+void printList(List<int> *L) {
+    int pos = L->currPos();
+    cout << "<";
+    for (L->moveToStart(); L->currPos() < pos; L->next()) {
+        cout << L->getValue() << " ";
+    }
+    if (L->length() > 0) cout << "|";
+    for (; L->currPos() < L->length(); L->next()) {
+        cout << " " << L->getValue();
+    }
+    cout << ">\n";
+}
+
 int main() {
     int k, x;
     cin >> k >> x;
+    List<int> *L;
 //    LinkedList<int> foo;
     Array<int> foo;
     for (int i = 0; i < k; i++) {
         int val;
         cin >> val;
-//        foo.printList();
         foo.append(val);
     }
-//    foo.printList();
-//    LinkedList<int> L(foo);
-    Array<int> L(foo);
-    L.printList();
+//  L = new LinkedList<int> (foo);
+    L = new Array<int> (foo);
+    int pos = L->currPos();
+    printList(L);
+    L->moveToPos(pos);
 
-    int q, p;
+    int q, p, ret;
     while (true) {
         cin >> q >> p;
         if (q == 0) break;
+
+        ret = -1;
+
         switch(q) {
             case 1:
-                L.clear();
-                cout << -1 << "\n";
+                L->clear();
                 break;
             case 2:
-                L.insert(p);
-                cout << -1 << "\n";
+                L->insert(p);
                 break;
             case 3:
-                L.append(p);
-                cout << -1 << "\n";
+                L->append(p);
                 break;
             case 4:
-                cout << L.remove() << "\n";
+                ret =  L->remove();
                 break;
             case 5:
-                L.moveToStart();
-                cout << -1 << "\n";
+                L->moveToStart();
                 break;
             case 6:
-                L.moveToEnd();
-                cout << -1 << "\n";
+                L->moveToEnd();
                 break;
             case 7:
-                L.prev();
-                cout << -1 << "\n";
+                L->prev();
                 break;
             case 8:
-                L.next();
-                cout << -1 << "\n";
+                L->next();
                 break;
             case 9:
-                cout << L.length() << "\n";
+                ret = L->length();
                 break;
             case 10:
-                cout << L.currPos() << "\n";
+                ret = L->currPos();
                 break;
             case 11:
-                L.moveToPos(p);
-                cout << -1 << "\n";
+                L->moveToPos(p);
                 break;
             case 12:
-                cout << L.getValue() << "\n";
+                ret = L->getValue();
                 break;
             case 13:
-                cout << L.Search(p) << "\n";
+                ret = L->Search(p);
                 break;
             default:
                 ;
         }
-        L.printList();
+
+        pos = L->currPos();
+        printList(L);
+        L->moveToPos(pos);
+        cout << ret << "\n";
     }
 
+    delete L;
     return 0;
 }

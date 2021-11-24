@@ -10,6 +10,7 @@ class Array : public List<E> {
     int capacity;
     int size;
     int pos;
+    int chunk;
 
     void init() {
         arr = new E[1];
@@ -19,7 +20,8 @@ class Array : public List<E> {
     }
 
     void resize() {
-        capacity <<= 1;
+        assert(chunk > 0);
+        capacity += chunk;
         E *tmp = new E[capacity];
         for (int i = 0; i < size; i++) {
             tmp[i] = arr[i];
@@ -29,17 +31,20 @@ class Array : public List<E> {
     }
 
 public:
-    Array() {
+    Array(int x = 8) {
+        assert(x > 0);
+        chunk = x;
         init();
     }
 
-    Array(const E *arr) {
-        capacity = sizeof(arr) / sizeof(E);
+    Array(const E *arr, int x = 8) {
+        size = sizeof(arr) / sizeof(E);
+        assert(x > 0 && x >= size);
+        capacity = chunk = x;
         this->arr = new E[capacity];
         for (int i = 0; i < size; i++) {
             this->arr[i] = arr[i];
         }
-        size = capacity;
         pos = 0;
     }
 
@@ -54,7 +59,7 @@ public:
 
     void insert(const E &item) {
          if (size == capacity) resize();
-         for (int i = size++; i >= pos; i--) {
+         for (int i = size++; i > pos; i--) {
             arr[i] = arr[i-1];
          }
          arr[pos] = item;
@@ -66,6 +71,7 @@ public:
     }
 
     E remove() {
+        assert(pos < size);
         E ret = arr[pos];
         for (int i = pos; i < size-1; i++) {
             arr[i] = arr[i+1];
@@ -79,7 +85,7 @@ public:
     }
 
     void moveToEnd() {
-        pos = size;
+        pos = size - 1;
     }
 
     void prev() {
@@ -113,16 +119,5 @@ public:
             if (arr[i] == item) return i;
         }
         return -1;
-    }
-
-    void printList() {
-        for (int i = 0; i < pos; i++) {
-            cout << arr[i] << " ";
-        }
-        cout << "|";
-        for (int i = pos; i < size; i++) {
-            cout << " " << arr[i];
-        }
-        cout << "\n";
     }
 };
