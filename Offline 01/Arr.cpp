@@ -5,16 +5,17 @@
 using namespace std;
 
 template <typename E>
-class Array : public List<E> {
+class Arr : public List<E> {
     E *arr;
     int capacity;
     int size;
     int pos;
     int chunk;
 
-    void init() {
-        arr = new E[1];
-        capacity = 1;
+    void init(int x, int cap = 1) {
+        chunk = x;
+        capacity = cap;
+        arr = new E[capacity];
         size = 0;
         pos = 0;
     }
@@ -31,30 +32,29 @@ class Array : public List<E> {
     }
 
 public:
-    Array(int x = 8) {
+    Arr(int x = 8) {
         assert(x > 0);
-        chunk = x;
-        init();
+        init(x);
     }
 
-    Array(const E *arr, int x = 8) {
-        size = sizeof(arr) / sizeof(E);
-        assert(x > 0 && x >= size);
-        capacity = chunk = x;
-        this->arr = new E[capacity];
-        for (int i = 0; i < size; i++) {
-            this->arr[i] = arr[i];
+    Arr(List<E> *L, int x = 8) {
+        assert(x > 0 && x >= L->length());
+        init(x, x);
+
+        int tmp = L->currPos();
+        for (L->moveToStart(); L->currPos() < L->length(); L->next()) {
+            append(L->getValue());
         }
-        pos = 0;
+        L->moveToPos(tmp);
     }
 
-    ~Array() {
+    ~Arr() {
         delete[] arr;
     }
 
     void clear() {
         delete[] arr;
-        init();
+        init(chunk);
     }
 
     void insert(const E &item) {

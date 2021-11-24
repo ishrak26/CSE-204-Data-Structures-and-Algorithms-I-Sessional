@@ -21,15 +21,17 @@ int main() {
     int k, x;
     cin >> k >> x;
     List<int> *L;
-//    LinkedList<int> foo;
-    Array<int> foo;
+    LL<int> foo;
+//    Arr<int> foo;
     for (int i = 0; i < k; i++) {
         int val;
         cin >> val;
         foo.append(val);
     }
-//  L = new LinkedList<int> (foo);
-    L = new Array<int> (foo);
+    LL<int> ob(&foo);
+//    Arr<int> ob(&foo);
+
+    L = &ob;
     int pos = L->currPos();
     printList(L);
     L->moveToPos(pos);
@@ -87,10 +89,11 @@ int main() {
 
         pos = L->currPos();
         printList(L);
+//        cerr << "pos is " << pos << "\n";
+//        cerr << "currPos is " << L->currPos() << "\n";
         L->moveToPos(pos);
         cout << ret << "\n";
     }
 
-    delete L;
     return 0;
 }

@@ -5,7 +5,7 @@
 using namespace std;
 
 template <typename E>
-class LinkedList : public List<E> {
+class LL : public List<E> {
     class Node {
     public:
         E val;
@@ -43,18 +43,21 @@ class LinkedList : public List<E> {
     }
 
 public:
-    LinkedList() {
+    LL() {
         init();
     }
 
-    LinkedList(LinkedList &L) {
+    LL(List<E> *L) {
         init();
-        for (L.moveToStart(); L.currPos() < L.length(); L.next()) {
-            append(L.getValue());
+
+        int tmp = L->currPos();
+        for (L->moveToStart(); L->currPos() < L->length(); L->next()) {
+            append(L->getValue());
         }
+        L->moveToPos(tmp);
     }
 
-    ~LinkedList() {
+    ~LL() {
         clear();
     }
 
@@ -123,7 +126,21 @@ public:
 
     void moveToPos(int pos) {
         assert(pos >= 0 && pos < size);
-        if (pos < this->pos) {
+
+        if (this->pos == size) {
+            if (pos < size / 2) {
+                // traverse right from head
+                moveToStart();
+                while (this->pos != pos) next();
+            }
+            else {
+                // traverse left from tail
+                moveToEnd();
+                while (this->pos != pos) prev();
+            }
+        }
+
+        else if (pos < this->pos) {
             if (pos + 1 < this->pos - pos) {
                 // traverse right from head
                 moveToStart();
