@@ -33,11 +33,26 @@ class LL : public List<E> {
 
     void removeCurr() {
         assert(curr != NULL);
-        if (curr->prev != NULL) curr->prev->next = curr->next;
-        if (curr->next != NULL) curr->next->prev = curr->prev;
-        if (tail == curr) tail = curr->prev;
+
+        if (curr->prev != NULL) {
+            curr->prev->next = curr->next;
+        }
+        else {
+            // curr is head
+            head = curr->next;
+        }
+
+        if (curr->next != NULL) {
+            curr->next->prev = curr->prev;
+        }
+        else {
+            // curr is tail
+            tail = curr->prev;
+        }
+
         Node *tmp = curr;
         curr = curr->next;
+        if (curr == NULL && size) moveToEnd(); // shift left if curr was at the end
         delete tmp;
         --size;
     }
@@ -63,16 +78,22 @@ public:
 
     void clear() {
         moveToStart();
-        while (head != NULL) removeCurr();
+        while (size) removeCurr();
     }
 
     void insert(const E &item) {
         if (size == 0) {
             head = tail = curr = new Node(item);
         }
+        else if (curr == NULL) { // after the last element
+            append(item);
+            curr = tail;
+        }
         else {
-            curr->next = new Node(item, curr->next, curr);
-            if (tail == curr) tail = tail->next;
+            Node *tmp = new Node(item, curr, curr->prev);
+            if (curr->prev != NULL) curr->prev->next = tmp;
+            curr->prev = tmp;
+            curr = tmp;
         }
         ++size;
     }
@@ -109,8 +130,13 @@ public:
 
     void prev() {
         if (curr == head) return;
-        curr = curr->prev;
-        --pos;
+        if (curr == NULL) {
+            moveToEnd();
+        }
+        else {
+            curr = curr->prev;
+            --pos;
+        }
     }
 
     // allows traversal up to size position (n)
@@ -125,22 +151,13 @@ public:
     int currPos() { return pos; }
 
     void moveToPos(int pos) {
-        assert(pos >= 0 && pos < size);
+        assert(pos >= 0 && pos <= size);
 
         if (this->pos == size) {
-            if (pos < size / 2) {
-                // traverse right from head
-                moveToStart();
-                while (this->pos != pos) next();
-            }
-            else {
-                // traverse left from tail
-                moveToEnd();
-                while (this->pos != pos) prev();
-            }
+            moveToEnd();
         }
 
-        else if (pos < this->pos) {
+        if (pos < this->pos) {
             if (pos + 1 < this->pos - pos) {
                 // traverse right from head
                 moveToStart();
@@ -172,13 +189,16 @@ public:
 
     // returns the position of the element item or -1 if not found
     int Search(const E &item) {
-        Node *tmp = head;
-        for (int i = 0; tmp != NULL; i++) {
-            if (tmp->val == item) {
-                assert(i >= 0 && i < size);
-                return i;
+        int tmp = pos;
+        int ret = -1;
+        for (moveToStart(); pos < size; next()) {
+            assert(curr != NULL);
+            if (curr->val == item) {
+                ret = pos;
+                break;
             }
         }
-        return -1;
+        moveToPos(tmp);
+        return ret;
     }
 };

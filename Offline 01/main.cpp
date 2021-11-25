@@ -5,6 +5,10 @@
 using namespace std;
 
 void printList(List<int> *L) {
+    if (L->length() == 0) {
+        cout << "<>\n";
+        return;
+    }
     int pos = L->currPos();
     cout << "<";
     for (L->moveToStart(); L->currPos() < pos; L->next()) {
@@ -15,6 +19,7 @@ void printList(List<int> *L) {
         cout << " " << L->getValue();
     }
     cout << ">\n";
+    L->moveToPos(pos);
 }
 
 int main() {
@@ -32,9 +37,8 @@ int main() {
 //    Arr<int> ob(&foo);
 
     L = &ob;
-    int pos = L->currPos();
+
     printList(L);
-    L->moveToPos(pos);
 
     int q, p, ret;
     while (true) {
@@ -87,11 +91,10 @@ int main() {
                 ;
         }
 
-        pos = L->currPos();
         printList(L);
 //        cerr << "pos is " << pos << "\n";
 //        cerr << "currPos is " << L->currPos() << "\n";
-        L->moveToPos(pos);
+
         cout << ret << "\n";
     }
 
