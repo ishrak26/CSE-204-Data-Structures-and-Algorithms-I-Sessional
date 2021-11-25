@@ -73,7 +73,9 @@ public:
     }
 
     ~LL() {
+//        cerr << "destructor of LL called\n";
         clear();
+
     }
 
     void clear() {
