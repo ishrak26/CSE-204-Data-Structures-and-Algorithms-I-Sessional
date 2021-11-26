@@ -15,6 +15,7 @@ public:
         assert(implementation_type == 'A' || implementation_type == 'L' || implementation_type == 'a'
                || implementation_type == 'l');
         assert(transport_number >= 0);
+
         if (implementation_type == 'a' || implementation_type == 'l') {
             implementation_type -= 32;
         }
@@ -36,11 +37,13 @@ public:
         delete[] transports;
     }
 
+    // Add stoppage
     void add(int transport, const E &item) {
         assert(transport >= 0 && transport < transport_number);
         transports[transport]->append(item);
     }
 
+    // print in given format
     void print(List<E> *L) {
         bool flag = true;
         for (int i = 0; i < transport_number; i++) {
@@ -69,7 +72,7 @@ public:
 
 int main() {
     int transport_number = 3;
-    TNL<int> ob('L', transport_number);
+    TNL<int> ob('A', transport_number);
 
     // Take initial input
     int k;

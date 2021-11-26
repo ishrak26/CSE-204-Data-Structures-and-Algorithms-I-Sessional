@@ -31,6 +31,7 @@ class LL : public List<E> {
         pos = 0;
     }
 
+    // remove node pointed by curr
     void removeCurr() {
         assert(curr->next != NULL); // points to after last element
 
@@ -56,15 +57,6 @@ class LL : public List<E> {
             prev();
             tail = curr;
         }
-
-//        curr = curr->next;
-//        if (curr->next == NULL) {
-//            // curr was pointing to last element before removal
-//            prev();
-//            tail = curr;
-//        }
-//        delete tmp;
-//        --size;
     }
 
 public:
@@ -107,22 +99,6 @@ public:
             curr = tmp;
             ++size;
         }
-
-
-//        if (curr->prev == NULL) {
-//            // curr is head
-//            head = tmp;
-//        }
-//        else {
-//            curr->prev->next = tmp;
-//        }
-//        curr->prev = tmp;
-//        if (curr->next == NULL) {
-//            // position is after last element
-//            tail = tmp;
-//        }
-//        curr = tmp;
-//        ++size;
     }
 
     void append(const E &item) {
@@ -153,6 +129,7 @@ public:
         pos = 0;
     }
 
+    // point to last element
     void moveToEnd() {
         assert(size > 0);
         curr = tail;

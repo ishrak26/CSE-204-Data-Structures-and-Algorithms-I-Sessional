@@ -12,6 +12,7 @@ class Arr : public List<E> {
     int pos;
     int chunk;
 
+    // initialize array
     void init(int x, int cap = 1) {
         chunk = x;
         capacity = cap;
@@ -20,6 +21,7 @@ class Arr : public List<E> {
         pos = 0;
     }
 
+    // resize in chunks
     void resize() {
         assert(chunk > 0);
         capacity += chunk;
@@ -54,7 +56,7 @@ public:
 
     void clear() {
         delete[] arr;
-        init(chunk);
+        init(chunk); // for future use
     }
 
     void insert(const E &item) {
@@ -77,6 +79,7 @@ public:
             arr[i] = arr[i+1];
         }
         --size;
+        if (pos == size && size > 0) --pos;
         return ret;
     }
 

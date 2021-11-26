@@ -4,8 +4,7 @@
 
 using namespace std;
 
-template <typename E>
-void printList(List<E> *L) {
+void printList(List<int> *L) {
     if (L->length() == 0) {
         cout << "<>\n";
         return;
@@ -26,23 +25,22 @@ void printList(List<E> *L) {
 int main() {
     int k, x;
     cin >> k >> x;
-    List<double> *L;
-    LL<double> foo;
-//    Arr<int> foo;
+    List<int> *L;
+//    LL<int> foo;
+    Arr<int> foo;
     for (int i = 0; i < k; i++) {
-        double val;
+        int val;
         cin >> val;
         foo.append(val);
     }
-    LL<double> ob(&foo);
-//    Arr<int> ob(&foo);
+//    LL<int> ob(&foo);
+    Arr<int> ob(&foo);
 
     L = &ob;
 
     printList(L);
 
-    int q, ret;
-    double p;
+    int q, p, ret;
     while (true) {
         cin >> q >> p;
         if (q == 0) break;
@@ -90,7 +88,7 @@ int main() {
                 ret = L->Search(p);
                 break;
             default:
-                ;
+                cout << "Invalid Input\n";
         }
 
         printList(L);
