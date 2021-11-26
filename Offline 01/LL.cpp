@@ -12,6 +12,11 @@ class LL : public List<E> {
         Node *next;
         Node *prev;
 
+        Node(Node *next = NULL, Node *prev = NULL) {
+            this->next = next;
+            this->prev = prev;
+        }
+
         Node(const E &val, Node *next = NULL, Node *prev = NULL) {
             this->val = val;
             this->next = next;
@@ -26,7 +31,7 @@ class LL : public List<E> {
     int pos;
 
     void init() {
-        head = tail = curr = new Node(-1);
+        head = tail = curr = new Node;
         size = 0;
         pos = 0;
     }
