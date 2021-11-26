@@ -4,7 +4,8 @@
 
 using namespace std;
 
-void printList(List<int> *L) {
+template <typename E>
+void printList(List<E> *L) {
     if (L->length() == 0) {
         cout << "<>\n";
         return;
@@ -25,22 +26,23 @@ void printList(List<int> *L) {
 int main() {
     int k, x;
     cin >> k >> x;
-    List<int> *L;
-    LL<int> foo;
+    List<double> *L;
+    LL<double> foo;
 //    Arr<int> foo;
     for (int i = 0; i < k; i++) {
-        int val;
+        double val;
         cin >> val;
         foo.append(val);
     }
-    LL<int> ob(&foo);
+    LL<double> ob(&foo);
 //    Arr<int> ob(&foo);
 
     L = &ob;
 
     printList(L);
 
-    int q, p, ret;
+    int q, ret;
+    double p;
     while (true) {
         cin >> q >> p;
         if (q == 0) break;

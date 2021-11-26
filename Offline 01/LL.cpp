@@ -26,35 +26,45 @@ class LL : public List<E> {
     int pos;
 
     void init() {
-        head = tail = curr = NULL;
+        head = tail = curr = new Node(-1);
         size = 0;
         pos = 0;
     }
 
     void removeCurr() {
-        assert(curr != NULL);
+        assert(curr->next != NULL); // points to after last element
 
-        if (curr->prev != NULL) {
+        if (curr->prev != NULL) { // not first element
             curr->prev->next = curr->next;
         }
         else {
-            // curr is head
+            // curr is first element
             head = curr->next;
         }
 
-        if (curr->next != NULL) {
-            curr->next->prev = curr->prev;
-        }
-        else {
-            // curr is tail
-            tail = curr->prev;
-        }
+        curr->next->prev = curr->prev;
 
         Node *tmp = curr;
         curr = curr->next;
-        if (curr == NULL && size) moveToEnd(); // shift left if curr was at the end
         delete tmp;
         --size;
+
+        if (size == 0) {
+            curr = tail = head;
+        }
+        else if (curr->next == NULL) {
+            prev();
+            tail = curr;
+        }
+
+//        curr = curr->next;
+//        if (curr->next == NULL) {
+//            // curr was pointing to last element before removal
+//            prev();
+//            tail = curr;
+//        }
+//        delete tmp;
+//        --size;
     }
 
 public:
@@ -64,7 +74,6 @@ public:
 
     LL(List<E> *L) {
         init();
-
         int tmp = L->currPos();
         for (L->moveToStart(); L->currPos() < L->length(); L->next()) {
             append(L->getValue());
@@ -83,35 +92,57 @@ public:
 
     void insert(const E &item) {
         if (size == 0) {
-            head = tail = curr = new Node(item);
-        }
-        else if (curr == NULL) { // after the last element
             append(item);
-            curr = tail;
         }
         else {
             Node *tmp = new Node(item, curr, curr->prev);
-            if (curr->prev != NULL) curr->prev->next = tmp;
+            if (curr->prev == NULL) head = tmp;
+            else curr->prev->next = tmp;
+
+            if (curr->next == NULL) {
+                tail->next = tmp;
+                tail = tmp;
+            }
             curr->prev = tmp;
             curr = tmp;
+            ++size;
         }
-        ++size;
+
+
+//        if (curr->prev == NULL) {
+//            // curr is head
+//            head = tmp;
+//        }
+//        else {
+//            curr->prev->next = tmp;
+//        }
+//        curr->prev = tmp;
+//        if (curr->next == NULL) {
+//            // position is after last element
+//            tail = tmp;
+//        }
+//        curr = tmp;
+//        ++size;
     }
 
     void append(const E &item) {
         if (size == 0) {
-            head = tail = curr = new Node(item);
+            curr->prev = new Node(item, curr, NULL);
+            head = tail = curr = curr->prev;
         }
         else {
-            tail->next = new Node(item, tail->next, tail);
+            Node *tmp = new Node(item, tail->next, tail);
+            tail->next->prev = tmp;
+            tail->next = tmp;
             tail = tail->next;
+
         }
         ++size;
     }
 
     // Remove and return the current element
     E remove() {
-        assert(curr != NULL);
+        assert(curr->next != NULL);
         E item = curr->val;
         removeCurr();
         return item;
@@ -130,18 +161,13 @@ public:
 
     void prev() {
         if (curr == head) return;
-        if (curr == NULL) {
-            moveToEnd();
-        }
-        else {
-            curr = curr->prev;
-            --pos;
-        }
+        curr = curr->prev;
+        --pos;
     }
 
     // allows traversal up to size position (n)
     void next() {
-        if (curr == NULL) return;
+        if (curr->next == NULL) return;
         curr = curr->next;
         ++pos;
     }
@@ -152,10 +178,6 @@ public:
 
     void moveToPos(int pos) {
         assert(pos >= 0 && pos <= size);
-
-        if (this->pos == size) {
-            moveToEnd();
-        }
 
         if (pos < this->pos) {
             if (pos + 1 < this->pos - pos) {
@@ -172,6 +194,7 @@ public:
             if (size - pos < pos - this->pos) {
                 // traverse left from tail
                 moveToEnd();
+                next();
                 while (this->pos != pos) prev();
             }
             else {
@@ -183,7 +206,7 @@ public:
     }
 
     E getValue() {
-        assert(curr != NULL);
+        assert(curr->next != NULL); // curr points to after last element
         return curr->val;
     }
 
