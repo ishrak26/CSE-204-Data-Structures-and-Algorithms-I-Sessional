@@ -2,51 +2,93 @@
 #include "LL.cpp"
 #include "Arr.cpp"
 
-#define TRANSPORT_NUMBER 3
-
 using namespace std;
 
-void printTransports(List<int> **transports, int k) {
-    bool flag = true;
-    for (int i = 0; i < TRANSPORT_NUMBER; i++) {
-        flag = true;
-        for (int j = 0; j < k; j++) {
-            if (transports[i]->Search(j) != -1) {
-                if (flag) {
-                    flag = false;
-                    cout << j;
+template<typename E>
+class TNL {
+    List<E> **transports;
+    int transport_number;
+    char implementation_type;
+
+public:
+    TNL(char implementation_type = 'A', int transport_number = 3) {
+        assert(implementation_type == 'A' || implementation_type == 'L' || implementation_type == 'a'
+               || implementation_type == 'l');
+        assert(transport_number >= 0);
+        if (implementation_type == 'a' || implementation_type == 'l') {
+            implementation_type -= 32;
+        }
+        this->implementation_type = implementation_type;
+        this->transport_number = transport_number;
+
+        transports = new List<E>*[transport_number];
+        for (int i = 0; i < transport_number; i++) {
+            if (implementation_type == 'A') transports[i] = new Arr<E>;
+            else transports[i] = new LL<E>;
+        }
+    }
+
+    ~TNL() {
+        for (int i = 0; i < transport_number; i++) {
+            if (implementation_type == 'A') delete (Arr<E>*)transports[i];
+            else delete (LL<E>*)transports[i];
+        }
+        delete[] transports;
+    }
+
+    void add(int transport, const E &item) {
+        assert(transport >= 0 && transport < transport_number);
+        transports[transport]->append(item);
+    }
+
+    void print(List<E> *L) {
+        bool flag = true;
+        for (int i = 0; i < transport_number; i++) {
+            flag = true;
+            int pos = L->currPos();
+            for (L->moveToStart(); L->currPos() < L->length(); L->next()) {
+                E item = L->getValue();
+                if (transports[i]->Search(item) != -1) {
+                    if (flag) {
+                        flag = false;
+                        cout << item;
+                    }
+                    else {
+                        cout << "," << item;
+                    }
                 }
                 else {
-                    cout << "," << j;
+                    cout << ",";
                 }
             }
-            else {
-                cout << ",";
-            }
+            L->moveToPos(pos);
+            cout << "\n";
         }
-        cout << "\n";
     }
-}
+};
 
 int main() {
-    List<int> **transports = new List<int>*[TRANSPORT_NUMBER]; // {Rickshaw, Bus, Train}
-    for (int i = 0; i < TRANSPORT_NUMBER; i++) {
-        transports[i] = new Arr<int>;
-    }
+    int transport_number = 3;
+    TNL<int> ob('L', transport_number);
 
     // Take initial input
     int k;
     cin >> k;
+    Arr<int> L(k);
     for (int i = 0; i < k; i++) {
-        transports[0]->append(i);
+        L.append(i);
     }
-    for (int i = 1; i < TRANSPORT_NUMBER; i++) {
+
+    for (int i = 0; i < k; i++) {
+        ob.add(0, i);
+    }
+    for (int i = 1; i < transport_number; i++) {
         int n;
         cin >> n;
         for (int j = 0; j < n; j++) {
             int stop;
             cin >> stop;
-            transports[i]->append(stop);
+            ob.add(i, stop);
         }
     }
 
@@ -54,17 +96,12 @@ int main() {
     cin >> t;
     switch(t) {
         case 1:
-            printTransports(transports, k);
+            ob.print(&L);
             break;
 
         default:
-            ;
+            cout << "Invalid Input\n";
     }
 
-    for (int i = 0; i < TRANSPORT_NUMBER; i++) {
-        transports[i]->clear();
-        delete transports[i];
-    }
-    delete[] transports;
     return 0;
 }

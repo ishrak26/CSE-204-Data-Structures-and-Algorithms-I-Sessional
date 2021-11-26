@@ -92,8 +92,6 @@ int main() {
         }
 
         printList(L);
-//        cerr << "pos is " << pos << "\n";
-//        cerr << "currPos is " << L->currPos() << "\n";
 
         cout << ret << "\n";
     }
