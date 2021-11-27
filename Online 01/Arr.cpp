@@ -110,7 +110,6 @@ public:
     }
 
     void moveToPos(int pos) {
-//        cerr << "pos in move is " << pos << "\n";
         assert(pos >= 0 && pos <= size);
         this->pos = pos;
     }

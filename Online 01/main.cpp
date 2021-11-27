@@ -10,7 +10,6 @@ void printList(List<int> *L) {
         return;
     }
     int pos = L->currPos();
-    cerr << "pos before is " << pos << "\n";
     cout << "<";
     L->moveToStart();
     for (int i = 0; i < pos; i++) {
@@ -24,7 +23,6 @@ void printList(List<int> *L) {
     }
     cout << ">\n";
     L->moveToPos(pos);
-    cerr << "pos after is " << L->currPos() << "\n";
 }
 
 int main() {
@@ -37,30 +35,9 @@ int main() {
         int val;
         cin >> val;
         foo.append(val);
-//        cerr << "main\n";
     }
 
-    cerr << "appended successfully\n";
-//    cerr << foo.getValue() << "\n";
-//    foo.next();
-//    cerr << "next ok\n";
-//    cerr << foo.currPos() << "\n";
-//    cerr << "currPos ok\n";
-//    cerr << foo.getValue() << "\n";
-//    cerr << "foo " << foo.getValue() << "\n";
-//    exit(1);
-
     LL<int> ob(&foo);
-//    cerr << "len is " << ob.length() << "\n";
-//    exit(1);
-//    cout << ob.getValue();
-//    for (int i = 0; i < ob.length(); i++) {
-//        cout << ob.getValue() << "\n";
-//        ob.next();
-//    }
-//    printList(&ob);
-//    cerr << "list printed\n";
-//    return 1;
 //    Arr<int> ob(&foo);
 
     L = &ob;
