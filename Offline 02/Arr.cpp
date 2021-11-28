@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Stack.h"
 
+#define DEFAULT_SIZE 1
+
 using namespace std;
 
 template <typename E>
@@ -9,6 +11,13 @@ class Arr: Stack<E> {
     int top;
     int capacity;
     int direction;
+
+    void init(int cap = DEFAULT_SIZE) {
+        arr = new E[cap];
+        top = 0;
+        capacity = cap;
+        direction = 1;
+    }
 
     void resize() { // double the capacity
         capacity <<= 1;
@@ -30,6 +39,40 @@ class Arr: Stack<E> {
     }
 
 public:
+    Arr(int x = DEFAULT_SIZE) {
+        init(x);
+    }
+
+    Arr(Stack<E> *s, int x = DEFAULT_SIZE) {
+        init(x);
+
+        int len = s.length();
+        E *arr = new E[len];
+        for (int i = 0; i < len; i++) {
+            arr[i] = s.pop();
+        }
+        for (int i = len-1; i >= 0; i--) {
+            push(arr[i]);
+            s.push(arr[i]);
+        }
+        assert(s.length() == len);
+        delete arr;
+    }
+
+    Arr(E *arr, int direction) {
+        clear();
+        this->arr = arr;
+        this->direction = direction;
+
+        if (direction == 1) {
+            top = 0;
+        }
+        else {
+            capacity = sizeof(arr) / sizeof(E);
+            top = capacity - 1;
+        }
+    }
+
     void clear() {
         delete[] arr;
     }
