@@ -1,10 +1,12 @@
+#pragma once
+
 #include <iostream>
 #include "Stack.h"
 
 using namespace std;
 
 template <typename E>
-class LL: Stack<E> {
+class LL: public Stack<E> {
     class Node {
     public:
         E val;

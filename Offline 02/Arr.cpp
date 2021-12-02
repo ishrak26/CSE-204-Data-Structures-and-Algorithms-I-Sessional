@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include "Stack.h"
 
@@ -6,7 +8,7 @@
 using namespace std;
 
 template <typename E>
-class Arr: Stack<E> {
+class Arr: public Stack<E> {
     E *arr;
     int top;
     int capacity;
