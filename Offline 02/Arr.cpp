@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "Stack.h"
+#include "assert.h"
 
 #define DEFAULT_SIZE 1
 
@@ -45,34 +46,31 @@ public:
         init(x);
     }
 
-    Arr(Stack<E> *s, int x = DEFAULT_SIZE) {
-        init(x);
+    Arr(Stack<E> *s) {
+        init(s->length());
 
-        int len = s.length();
-        E *arr = new E[len];
-        for (int i = 0; i < len; i++) {
-            arr[i] = s.pop();
+        Arr<E> tmp;
+        while (s->length()) {
+            tmp.push(s->pop());
         }
-        for (int i = len-1; i >= 0; i--) {
-            push(arr[i]);
-            s.push(arr[i]);
+        while (tmp.length()) {
+            push(tmp.topValue());
+            s->push(tmp.pop());
         }
-        assert(s.length() == len);
-        delete arr;
+        assert(s->length() == length());
     }
 
     Arr(E *arr, int direction) {
-        clear();
+//        clear();
         this->arr = arr;
-        this->direction = direction;
+        capacity = sizeof(arr) / sizeof(E);
 
-        if (direction == 1) {
-            top = 0;
-        }
-        else {
-            capacity = sizeof(arr) / sizeof(E);
-            top = capacity - 1;
-        }
+        assert(direction == 1 || direction == -1);
+        setDirection(direction);
+    }
+
+    ~Arr() {
+        clear();
     }
 
     void clear() {
@@ -121,5 +119,9 @@ public:
 
     void setDirection(int direction) {
         this->direction = direction;
+        if (direction == -1) top = capacity - 1;
+        else {
+            top = 0;
+        }
     }
 };

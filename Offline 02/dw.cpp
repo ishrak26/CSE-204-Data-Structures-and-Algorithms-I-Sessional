@@ -35,6 +35,13 @@ class dw {
             clean = new LL<int>;
             full_meals = new LL<int>;
         }
+        else {
+            // One Array Two Stack
+            int *arr = new int[n*x]; // no further resizing needed
+            dirty = new Arr<int>(arr, 1);
+            clean = new Arr<int>(arr, -1);
+            full_meals = new Arr<int>;
+        }
     }
 
     void clear_dirty_stack() {
@@ -71,7 +78,7 @@ public:
         assert(x > 0);
         this->x = x;
 
-        assert(implementation == 'A' || implementation == 'L');
+        assert(implementation == 'A' || implementation == 'L' || implementation == 'T');
         this->implementation = implementation;
 
         alloc_mem();
@@ -91,6 +98,12 @@ public:
             delete (LL<int>*) dirty;
             delete (LL<int>*) clean;
             delete (LL<int>*) full_meals;
+        }
+        else {
+            // One Array Two Stack
+            delete (Arr<int>*) dirty;// clearing any of clean or dirty would do
+            delete (Arr<int>*) clean;
+            delete (Arr<int>*) full_meals;
         }
     }
 
@@ -161,7 +174,7 @@ public:
 int main() {
     int n, x;
     cin >> n >> x;
-    dw ob(n, x);
+    dw ob(n, x, 'L');
     for (int i = 0; i < x; i++) {
         int time;
         cin >> time;
