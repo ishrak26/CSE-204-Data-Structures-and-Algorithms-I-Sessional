@@ -60,10 +60,10 @@ public:
         assert(s->length() == length());
     }
 
-    Arr(E *arr, int direction) {
+    Arr(E *arr, int direction, int capacity = DEFAULT_SIZE) {
 //        clear();
         this->arr = arr;
-        capacity = sizeof(arr) / sizeof(E);
+        this->capacity = capacity;
 
         assert(direction == 1 || direction == -1);
         setDirection(direction);

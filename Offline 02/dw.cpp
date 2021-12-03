@@ -38,8 +38,8 @@ class dw {
         else {
             // One Array Two Stack
             int *arr = new int[n*x]; // no further resizing needed
-            dirty = new Arr<int>(arr, 1);
-            clean = new Arr<int>(arr, -1);
+            dirty = new Arr<int>(arr, 1, n*x);
+            clean = new Arr<int>(arr, -1, n*x);
             full_meals = new Arr<int>;
         }
     }
@@ -102,7 +102,7 @@ public:
         else {
             // One Array Two Stack
             delete (Arr<int>*) dirty;// clearing any of clean or dirty would do
-            delete (Arr<int>*) clean;
+            delete clean; // avoids double freeing
             delete (Arr<int>*) full_meals;
         }
     }
@@ -167,18 +167,6 @@ public:
                     clean->push(curr_wash_end_time);
                 }
             }
-
-
-
-//            dirty->push(courses[course_no]);
-
-//            clear_dirty_stack();
-//
-//            // curr_wash_end_time = max(curr_wash_end_time, time) + courses[course_no] - 1;
-//            curr_wash_end_time = curr_wash_end_time > time ? curr_wash_end_time : time;
-//            curr_wash_end_time += courses[course_no] - 1;
-//
-//            clean->push(curr_wash_end_time);
         }
 
         ++meal_count[friend_no];
@@ -222,7 +210,7 @@ public:
 int main() {
     int n, x;
     cin >> n >> x;
-    dw ob(n, x, 'L');
+    dw ob(n, x, 'T');
     for (int i = 0; i < x; i++) {
         int time;
         cin >> time;
