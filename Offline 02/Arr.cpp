@@ -37,16 +37,18 @@ class Arr: public Stack<E> {
             }
         }
 
-        clear();
+        delete[] arr;
         arr = newArr;
     }
 
 public:
     Arr(int x = DEFAULT_SIZE) {
+        assert(x > 0);
         init(x);
     }
 
-    Arr(Stack<E> *s) {
+    Arr(Stack<E> *s) { // copy a given stack
+        assert(s->length() > 0);
         init(s->length());
 
         Arr<E> tmp;
@@ -60,9 +62,10 @@ public:
         assert(s->length() == length());
     }
 
-    Arr(E *arr, int direction, int capacity = DEFAULT_SIZE) {
-//        clear();
+    Arr(E *arr, int direction, int capacity = DEFAULT_SIZE) { // one array two stack
         this->arr = arr;
+
+        assert(capacity > 0);
         this->capacity = capacity;
 
         assert(direction == 1 || direction == -1);
@@ -70,20 +73,23 @@ public:
     }
 
     ~Arr() {
-        clear();
+        delete[] arr;
     }
 
     void clear() {
         delete[] arr;
+        init();
     }
 
     void push(E item) {
         if (direction == 1) {
             if (top == capacity) resize();
+            assert(top < capacity);
             arr[top++] = item;
         }
         else {
             if (top == -1) resize();
+            assert(top >= 0);
             arr[top--] = item;
         }
     }
@@ -118,8 +124,11 @@ public:
     }
 
     void setDirection(int direction) {
+        assert(direction == 1 || direction == -1);
         this->direction = direction;
-        if (direction == -1) top = capacity - 1;
+        if (direction == -1) {
+            top = capacity - 1;
+        }
         else {
             top = 0;
         }

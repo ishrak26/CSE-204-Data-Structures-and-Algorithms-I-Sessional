@@ -34,17 +34,15 @@ public:
     LL(Stack<E> *s) { // copy a given stack
         init();
 
-        int len = s.length();
-        E *arr = new E[len];
-        for (int i = 0; i < len; i++) {
-            arr[i] = s.pop();
+        LL<E> tmp;
+        while (s->length()) {
+            tmp.push(s->pop());
         }
-        for (int i = len-1; i >= 0; i--) {
-            push(arr[i]);
-            s.push(arr[i]);
+        while (tmp.length()) {
+            push(tmp.topValue());
+            s->push(tmp.pop());
         }
-        assert(s.length() == len);
-        delete arr;
+        assert(s->length() == length());
     }
 
     ~LL() {

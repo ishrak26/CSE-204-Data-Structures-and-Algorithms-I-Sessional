@@ -29,6 +29,7 @@ int main() {
     }
 
     Arr<int> ob(&tmp);
+//    LL<int> ob(&tmp);
     print_stack(&ob);
 
     int p, q, ret;

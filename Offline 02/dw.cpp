@@ -10,20 +10,15 @@ class dw {
     char implementation;
     int n; // no. of friends
     int x; // no. of courses
-    int *courses;
+    int *courses; // keeps track of which course takes how much time
     Stack<int> *dirty; // keeps track of dirty dishes
     Stack<int> *clean; // keeps track of clean dishes
-    int *meal_count; // keeps track of which friend completed how many meals
-    Stack<int> *full_meals; // keeps track of which friend completed full meal
+    Stack<int> *full_meals; // keeps track of which friends completed full meal
 
     int curr_wash_end_time;
 
     void alloc_mem() {
         courses = new int[x];
-        meal_count = new int[n];
-        for (int i = 0; i < n; i++) {
-            meal_count[i] = 0;
-        }
 
         if (implementation == 'A') {
             dirty = new Arr<int>;
@@ -86,7 +81,6 @@ public:
 
     ~dw() {
         delete[] courses;
-        delete[] meal_count;
 
         if (implementation == 'A') {
             delete (Arr<int>*) dirty;
@@ -169,8 +163,7 @@ public:
             }
         }
 
-        ++meal_count[friend_no];
-        if (meal_count[friend_no] == x) {
+        if (course_no + 1 == x) {
             full_meals->push(friend_no + 1);
         }
     }
@@ -185,10 +178,7 @@ public:
     }
 
     bool check_all_full_meal() {
-        for (int i = 0; i < n; i++) {
-            if (meal_count[i] != x) return false;
-        }
-        return true;
+        return full_meals->length() == n;
     }
 
     void print_full_meals() {
@@ -210,7 +200,7 @@ public:
 int main() {
     int n, x;
     cin >> n >> x;
-    dw ob(n, x, 'T');
+    dw ob(n, x, 'A');
     for (int i = 0; i < x; i++) {
         int time;
         cin >> time;
