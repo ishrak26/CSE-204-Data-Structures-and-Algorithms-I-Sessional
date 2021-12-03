@@ -121,16 +121,64 @@ public:
         --course_no;
 
         if (time <= curr_wash_end_time) {
+            // the washer is already busy washing, so the dish has to wait
             dirty->push(courses[course_no]);
         }
-        else {
-            clear_dirty_stack();
-
-            // curr_wash_end_time = max(curr_wash_end_time, time) + courses[course_no] - 1;
-            curr_wash_end_time = curr_wash_end_time > time ? curr_wash_end_time : time;
-            curr_wash_end_time += courses[course_no] - 1;
-
+        else if (time == curr_wash_end_time + 1) {
+            // the washer is just looking for dishes, and got one
+            curr_wash_end_time += courses[course_no];
             clean->push(curr_wash_end_time);
+        }
+        else if (dirty->length() == 0) {
+            // there is nothing to wash
+            // so this dish will now be washed
+
+            /// curr_wash_end_time = max(curr_wash_end_time, time-1) + courses[course_no];
+            curr_wash_end_time = curr_wash_end_time > time-1 ? curr_wash_end_time : time-1;
+            curr_wash_end_time += courses[course_no];
+            clean->push(curr_wash_end_time);
+        }
+        else {
+            // the washer had the hands free at some time in between
+            // so if some dishes were there in the dirty stack,
+            // at least one of them were washed
+            while (dirty->length()) {
+                curr_wash_end_time += dirty->pop();
+                clean->push(curr_wash_end_time);
+
+                if (time <= curr_wash_end_time) {
+                    // the washer is already busy washing, so the dish has to wait
+                    dirty->push(courses[course_no]);
+                    break;
+                }
+                else if (time == curr_wash_end_time + 1) {
+                    // the washer is just looking for dishes, and got one
+                    curr_wash_end_time += courses[course_no];
+                    clean->push(curr_wash_end_time);
+                    break;
+                }
+                else if (dirty->length() == 0) {
+                    // there is nothing to wash
+                    // so this dish will now be washed
+
+                    /// curr_wash_end_time = max(curr_wash_end_time, time-1) + courses[course_no];
+                    curr_wash_end_time = curr_wash_end_time > time-1 ? curr_wash_end_time : time-1;
+                    curr_wash_end_time += courses[course_no];
+                    clean->push(curr_wash_end_time);
+                }
+            }
+
+
+
+//            dirty->push(courses[course_no]);
+
+//            clear_dirty_stack();
+//
+//            // curr_wash_end_time = max(curr_wash_end_time, time) + courses[course_no] - 1;
+//            curr_wash_end_time = curr_wash_end_time > time ? curr_wash_end_time : time;
+//            curr_wash_end_time += courses[course_no] - 1;
+//
+//            clean->push(curr_wash_end_time);
         }
 
         ++meal_count[friend_no];
