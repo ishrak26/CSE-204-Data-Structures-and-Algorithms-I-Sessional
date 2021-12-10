@@ -115,15 +115,11 @@ class Bank {
                 // handle t1 first
                 leave_queue(1);
                 addhelp(s, t);
-//                enter_queue(t);
-//                check_queue_switch();
             }
             else if (s == t2 && s < t1) {
                 // handle t2 first
                 leave_queue(2);
                 addhelp(s, t);
-//                enter_queue(t);
-//                check_queue_switch();
             }
             else if (t1 == t2 && t1 < s) {
                 leave_queue(1);
@@ -136,8 +132,6 @@ class Bank {
                 leave_queue(1);
                 leave_queue(2);
                 addhelp(s, t);
-//                enter_queue(t);
-//                check_queue_switch();
             }
         }
     }
@@ -177,48 +171,6 @@ class Bank {
             }
         }
     }
-
-//    void addhelp(int s, int t) {
-//        if (s < t1) {
-//            if (s < t2) {
-//                // must stand at either of the queues
-//                enter_queue(t);
-//            }
-//            else if (s == t2) {
-//                leave_queue(2);
-//                enter_queue(t);
-//                check_queue_switch();
-//            }
-//            else {
-//                leave_queue(2);
-//                check_queue_switch();
-//                addhelp(s, t);
-//            }
-//        }
-//        else if (s == t1) {
-//            leave_queue(1);
-//            if (s < t2) {
-//                enter_queue(t);
-//                check_queue_switch();
-//            }
-//            else if (s == t2) {
-//                leave_queue(2);
-//                enter_queue();
-//                check_queue_switch();
-//            }
-//            else {
-//                leave_queue(2);
-//                check_queue_switch();
-//                addhelp(s, t);
-//            }
-//        }
-//        else {
-//            leave_queue(1);
-//            if (s < t2) {
-//
-//            }
-//        }
-//    }
 
 public:
     Bank(char implementation = 'A') {
