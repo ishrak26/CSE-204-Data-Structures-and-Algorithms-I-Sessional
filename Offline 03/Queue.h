@@ -12,7 +12,7 @@ public:
     virtual void enqueue(const E item) = 0;
     virtual E dequeue() = 0;
     virtual int length() const = 0;
-    virtual E frontValue() const = 0;
-    virtual E rearValue() const = 0;
+    virtual E frontValue() = 0;
+    virtual E rearValue() = 0;
     virtual E leaveQueue() = 0;
 };

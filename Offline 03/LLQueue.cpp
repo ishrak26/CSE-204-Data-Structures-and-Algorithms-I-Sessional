@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "Queue.h"
 
 using namespace std;
@@ -5,11 +6,11 @@ using namespace std;
 template <typename E>
 class LLQueue: public Queue<E> {
     class Node {
+    public:
         E val;
         Node *prev;
         Node *next;
 
-    public:
         Node(E val, Node *prev = NULL, Node *next = NULL) {
             this->val = val;
             this->prev = prev;
@@ -22,19 +23,22 @@ class LLQueue: public Queue<E> {
     Node *rear;
     int len;
 
+    inline bool isEmpty() { return len == 0; }
+
 public:
     LLQueue() {
         front = rear = NULL;
         len = 0;
     }
 
-    LLQueue(Queue<E> &q) {
-        int sz = q.length();
+    LLQueue(Queue<E> *q) {
+        len = 0;
+        int sz = q->length();
         for (int i = 0; i < sz; i++) {
-            enqueue(q.dequeue());
-            q.enqueue(rearValue());
+            enqueue(q->dequeue());
+            q->enqueue(rearValue());
         }
-        assert(q.size() == sz);
+        assert(q->length() == sz);
     }
 
     ~LLQueue() {
@@ -45,9 +49,10 @@ public:
         while (len) dequeue();
     }
 
+    // append at rear
     void enqueue(const E item) {
         // add item to rear of the list
-        if (len == 0) {
+        if (isEmpty()) {
             // empty list
             front = rear = new Node(item);
         }
@@ -58,15 +63,23 @@ public:
         ++len;
     }
 
-    /// HANDLE 1 ELEMENT LIST
+    // remove from front
     E dequeue() {
-        // remove from front
-        assert(len > 0); // front is not null
+        assert(!isEmpty()); // front is not null
+
         E ret = front->val;
+        Node *tmp = front;
         front = front->next;
-        delete front->prev;
-        front->prev = NULL;
+        delete tmp;
         --len;
+
+        if (isEmpty()) {
+            rear = front; // NULL
+        }
+        else {
+            front->prev = NULL;
+        }
+
         return ret;
     }
 
@@ -74,24 +87,33 @@ public:
         return len;
     }
 
-    E frontValue() const {
-        assert(len > 0); // front is not null
+    E frontValue() {
+        assert(!isEmpty()); // front is not null
         return front->val;
     }
 
-    E rearValue() const {
-        assert(len > 0); // rear is not null
+    E rearValue() {
+        assert(!isEmpty()); // rear is not null
         return rear->val;
     }
 
+    // remove from rear
     E leaveQueue() {
-        // remove from rear
-        assert(len > 0); // rear is not null
+        assert(!isEmpty()); // rear is not null
+
         E ret = rear->val;
+        Node *tmp = rear;
         rear = rear->prev;
-        delete rear->next;
-        rear->next = NULL;
+        delete tmp;
         --len;
+
+        if (isEmpty()) {
+            front = rear; // NULL
+        }
+        else {
+            rear->next = NULL;
+        }
+
         return ret;
     }
 };
