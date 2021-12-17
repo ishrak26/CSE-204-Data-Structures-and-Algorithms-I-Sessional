@@ -11,3 +11,8 @@ I 7
 T In
 T Pre
 T Post
+D 8
+D 7
+D 10
+D 10
+F 4

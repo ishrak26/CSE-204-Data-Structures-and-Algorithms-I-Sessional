@@ -43,8 +43,8 @@ int main(int argc, char **argv) {
             }
             else if (c == 'D') {
                 // remove
-                ob.remove(val);
-                ob.print_tree();
+                if (ob.remove(val)) ob.print_tree();
+                else cout << "Invalid Operation\n";
             }
             else {
                 // find
