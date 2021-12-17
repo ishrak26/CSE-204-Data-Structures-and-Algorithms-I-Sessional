@@ -68,13 +68,13 @@ class BST {
             // node is not full
             // find parent
             if (root->key == node->key) {
-                // no parent for root node
+                // no parent for root node of the tree
                 if (isLeaf(root)) {
                     delete root;
                     root = NULL;
                 }
                 else {
-                    // root has one empty node
+                    // root has exactly one empty child
                     Node *tmp = root;
                     root = root->left == NULL ? root->right : root->left;
                     delete tmp;
@@ -88,7 +88,7 @@ class BST {
                     else parent->right = NULL;
                 }
                 else {
-                    // node has one empty child
+                    // node has exactly one empty child
                     Node *child = node->left == NULL ? node->right : node->left;
                     if (parent->left == node) parent->left = child;
                     else parent->right = child;
