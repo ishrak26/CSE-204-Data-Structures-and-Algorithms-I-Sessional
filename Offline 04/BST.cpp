@@ -145,7 +145,7 @@ public:
     }
 
     ~BST() {
-
+        while (root != NULL) removehelp(root->key);
     }
 
     void insert(const Key key, const E val) {
