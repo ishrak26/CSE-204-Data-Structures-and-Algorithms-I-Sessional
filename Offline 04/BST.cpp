@@ -49,7 +49,7 @@ class BST {
 
     Node *find_parenthelp(Node *curr, Node *child) { // finds parent of a node in a subtree rooted at curr
         assert(curr != NULL);
-        if (child->key == curr->left->key || child->key == curr->right->key) return curr;
+        if ((curr->left != NULL && child->key == curr->left->key) || (curr->right != NULL && child->key == curr->right->key)) return curr;
         if (child->key < curr->key) return find_parenthelp(curr->left, child);
         return find_parenthelp(curr->right, child);
     }
