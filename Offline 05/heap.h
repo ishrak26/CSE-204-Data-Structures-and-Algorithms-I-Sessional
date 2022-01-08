@@ -63,8 +63,11 @@ public:
     void insert(int val) {
         if (sz == capacity) resize();
         arr[++sz] = val;
-        swap(arr[1], arr[sz]);
-        max_heapify(1);
+        // percolate up
+        for (int i = sz; i > 1 && arr[parent(i)] < arr[i]; i = parent(i)) {
+            swap(arr[i], arr[parent(i)]);
+        }
+
 //        cerr << "inserted element is " << val << '\n';
 //        print_array();
     }
