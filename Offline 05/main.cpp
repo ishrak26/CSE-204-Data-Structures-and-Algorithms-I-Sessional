@@ -15,6 +15,7 @@ int main()
     //reading from file begins. Loading all the numbers in the vector
     string myText;
     ifstream MyReadFile("numbers.txt");
+//    ifstream MyReadFile("test00.txt");
     while (getline (MyReadFile, myText))
       numbers.push_back(atoi(myText.c_str()));
     MyReadFile.close();
@@ -43,7 +44,7 @@ int main()
     cout<<pq.top()<<endl;
     cout<<h.getMax()<<endl;
     // returning the maximum number of the heap. You need to implement this.
-
+//    h.print_array();
     clock_t time_of_deletion_in_pq = clock();
 
     int number_of_numbers = pq.size();
@@ -64,5 +65,7 @@ int main()
 
     heapsort(numbers); // You need to implement this function in heap.h. You should use the heap class implemented by you to do this. Hint: the function declaration should be void heapsort(vector<int>&v);
     // Now, "numbers" vector contains the numbers in descending order
+
+
     return 0;
 }
