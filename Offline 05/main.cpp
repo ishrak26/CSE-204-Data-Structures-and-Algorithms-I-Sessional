@@ -3,6 +3,7 @@
 #include<cstdio>
 #include<queue>
 #include<ctime>
+#include<algorithm>
 #include "heap.h" //You need to implement this.
 
 using namespace std;
@@ -63,9 +64,20 @@ int main()
 
     cout << "Deleting " << numbers.size() << " numbers from my heap takes "<< float(clock() - time_of_deletion_in_my_heap) / CLOCKS_PER_SEC << " seconds\n";
 
+//    for (int i = 0; i < numbers.size(); i++) cout << numbers[i] << ' ';
+//    cout << '\n';
+    vector<int> cpy = numbers;
+    clock_t time_of_std_sort = clock();
+    sort(cpy.begin(), cpy.end());
+    cout << "Sorting " << cpy.size() << " numbers by std::sort takes " << float(clock() - time_of_std_sort) / CLOCKS_PER_SEC << " seconds\n";
+
+    clock_t time_of_heapsort = clock();
     heapsort(numbers); // You need to implement this function in heap.h. You should use the heap class implemented by you to do this. Hint: the function declaration should be void heapsort(vector<int>&v);
     // Now, "numbers" vector contains the numbers in descending order
-
-
+//    for (int i = 0; i < numbers.size(); i++) cout << numbers[i] << ' ';
+//    cout << '\n';
+    cout << "Sorting " << numbers.size() << " numbers by heapsort takes " << float(clock() - time_of_heapsort) / CLOCKS_PER_SEC << " seconds\n";
+    for (int i = 0; i < 10; i++) cout << numbers[i] << ' ';
+    cout << '\n';
     return 0;
 }

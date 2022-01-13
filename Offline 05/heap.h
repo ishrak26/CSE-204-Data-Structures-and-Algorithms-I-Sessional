@@ -96,5 +96,9 @@ public:
 };
 
 void heapsort(vector<int>& v) {
-
+    Heap h(v);
+    for (int i = 0, sz = v.size(); i < sz; i++) {
+        v[i] = h.getMax();
+        h.deleteKey();
+    }
 }
