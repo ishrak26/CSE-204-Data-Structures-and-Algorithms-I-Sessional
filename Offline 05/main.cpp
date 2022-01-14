@@ -68,7 +68,7 @@ int main()
 //    cout << '\n';
     vector<int> cpy = numbers;
     clock_t time_of_std_sort = clock();
-    sort(cpy.begin(), cpy.end());
+    sort(cpy.rbegin(), cpy.rend());
     cout << "Sorting " << cpy.size() << " numbers by std::sort takes " << float(clock() - time_of_std_sort) / CLOCKS_PER_SEC << " seconds\n";
 
     clock_t time_of_heapsort = clock();
@@ -77,7 +77,18 @@ int main()
 //    for (int i = 0; i < numbers.size(); i++) cout << numbers[i] << ' ';
 //    cout << '\n';
     cout << "Sorting " << numbers.size() << " numbers by heapsort takes " << float(clock() - time_of_heapsort) / CLOCKS_PER_SEC << " seconds\n";
-    for (int i = 0; i < 10; i++) cout << numbers[i] << ' ';
-    cout << '\n';
+//    for (int i = 0; i < 10; i++) cout << numbers[i] << ' ';
+//    cout << '\n';
+
+    for (int i = 0, sz = numbers.size(); i < sz; i++) {
+        if (cpy[i] != numbers[i]) {
+            cout << "Wrong answer\n";
+            cout << i << "-th number didn't match\n";
+            cout << "Output: " << numbers[i] << '\n';
+            cout << "Answer: " << cpy[i] << '\n';
+            return 1;
+        }
+    }
+    cout << "Accepted\n";
     return 0;
 }

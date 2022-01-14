@@ -1,9 +1,8 @@
-#include <iostream>
 #include <cassert>
 
 using namespace std;
 
-// max-heap
+// max-heap for int
 class Heap {
     int *arr;
     int sz;
@@ -22,9 +21,7 @@ class Heap {
     inline int left_child(int i) { return i<<1; }
     inline int right_child(int i) { return (i<<1) | 1; }
 
-    inline bool isLeaf(int i) { return (i<<1) > sz; }
-
-    void max_heapify(int i) {
+    void max_heapify(int i) { // O(logn)
         int l = left_child(i);
         int r = right_child(i);
         int ma = l <= sz && arr[l] > arr[i] ? l : i;
@@ -35,7 +32,7 @@ class Heap {
         }
     }
 
-    void build_max_heap() {
+    void build_max_heap() { // O(n)
         for (int i = sz>>1; i > 0; i--) max_heapify(i);
     }
 
@@ -47,12 +44,12 @@ public:
         arr = new int[capacity+1];
     }
 
-    // construct heap from vector
-    Heap(const vector<int>& v) {
+    // construct heap from given vector
+    Heap(const vector<int>& v) { // O(n)
         capacity = sz = v.size();
         arr = new int[capacity+1];
-        for (int i = 0; i < sz; i++) arr[i+1] = v[i];
-        build_max_heap();
+        for (int i = 0; i < sz; i++) arr[i+1] = v[i]; // O(n)
+        build_max_heap(); // O(n)
     }
 
     ~Heap() {
@@ -60,16 +57,13 @@ public:
     }
 
     // insert val into heap
-    void insert(int val) {
+    void insert(int val) { // O(logn)
         if (sz == capacity) resize();
         arr[++sz] = val;
         // percolate up
         for (int i = sz; i > 1 && arr[parent(i)] < arr[i]; i = parent(i)) {
             swap(arr[i], arr[parent(i)]);
         }
-
-//        cerr << "inserted element is " << val << '\n';
-//        print_array();
     }
 
     int size() {
@@ -77,28 +71,24 @@ public:
     }
 
     // returns max val
-    int getMax() {
-        assert(sz);
+    int getMax() { // O(1)
+        assert(sz); // heap is non-empty
         return arr[1];
     }
 
     // deletes root of the heap
-    void deleteKey() {
+    void deleteKey() { // O(logn)
+        assert(sz); // heap is non-empty
         arr[1] = arr[sz--];
-        max_heapify(1);
-    }
-
-    void print_array() {
-//        cout << "size is " << sz << '\n';
-        for (int i = 1; i <= sz; i++) cout << arr[i] << ' ';
-        cout << '\n';
+        max_heapify(1); // O(logn)
     }
 };
 
-void heapsort(vector<int>& v) {
-    Heap h(v);
+void heapsort(vector<int>& v) { // sorts in descending order
+    Heap h(v); // O(n)
     for (int i = 0, sz = v.size(); i < sz; i++) {
         v[i] = h.getMax();
-        h.deleteKey();
+        h.deleteKey(); // O(logn)
     }
+    // Total complexity: O(nlogn)
 }
