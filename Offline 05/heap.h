@@ -28,7 +28,7 @@ class Heap {
         ma = r <= sz && arr[r] > arr[ma] ? r : ma;
         if (i != ma) {
             swap(arr[i], arr[ma]);
-            max_heapify(ma);
+            max_heapify(ma); // tail recursion
         }
     }
 
@@ -87,7 +87,7 @@ public:
 void heapsort(vector<int>& v) { // sorts in descending order
     Heap h(v); // O(n)
     for (int i = 0, sz = v.size(); i < sz; i++) {
-        v[i] = h.getMax();
+        v[i] = h.getMax(); // O(1)
         h.deleteKey(); // O(logn)
     }
     // Total complexity: O(nlogn)
