@@ -1,5 +1,7 @@
 #include<iostream>
+#include<assert.h>
 #include<vector>
+#include<utility>
 #include<queue>
 
 using namespace std;
@@ -7,14 +9,17 @@ using namespace std;
 class SnakeLadder {
     int board_size;
     int die_faces;
+    // 1-indexed vectors
     vector<int> board; // keeps track of snakes and ladders
-    vector<int> level;
-    vector<int> parent;
+    vector<int> level; // keeps track of least no. of rolls for a position
+    vector<int> parent; // keeps track of previous rolls
+    bool isPlayed;
 
     void init(int n = 2, int x = 2) {
         die_faces = n;
         board_size = x;
         board.resize(board_size+1, -1);
+        isPlayed = false;
     }
 
     void bfs() {
@@ -33,7 +38,7 @@ class SnakeLadder {
                 int v = board[u];
                 if (level[v] == -1) {
                     // v is unvisited
-                    level[v] = level[u];
+                    level[v] = level[u]; // no extra roll required
                     parent[v] = u;
                     q.push(v);
                 }
@@ -50,9 +55,11 @@ class SnakeLadder {
                 }
             }
         }
+        isPlayed = true;
     }
 
     void print_path(int node) {
+        assert(isPlayed && node >= 0 && node <= board_size);
         if (parent[node] == -1) {
             // node is the root
             cout << node;
@@ -89,6 +96,7 @@ public:
     }
 
     vector<int> find_unreachable() {
+        assert(isPlayed);
         vector<int> unreachables;
         for (int i = 1; i <= board_size; i++) {
             if (level[i] == -1) unreachables.push_back(i);

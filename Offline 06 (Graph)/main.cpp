@@ -1,11 +1,13 @@
 #include<iostream>
 #include<vector>
+#include<utility>
 #include "SnakeLadder.h"
 
 using namespace std;
 
 int main() {
-    freopen ("input01.txt", "r", stdin);
+    // I/O redirection
+    freopen ("input.txt", "r", stdin);
     freopen("out.txt", "w", stdout);
     int t;
     cin >> t;
