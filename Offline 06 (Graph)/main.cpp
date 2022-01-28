@@ -7,8 +7,8 @@ using namespace std;
 
 int main() {
     // I/O redirection
-    freopen ("input.txt", "r", stdin);
-    freopen("out.txt", "w", stdout);
+    freopen ("in.txt", "r", stdin);
+    freopen("out00.txt", "w", stdout);
     int t;
     cin >> t;
     while (t--) {
