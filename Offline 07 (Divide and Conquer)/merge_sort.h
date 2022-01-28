@@ -29,7 +29,7 @@ void merge(vector<int>& v, int lo, int mid, int hi) {
 }
 
 void merge_sort(vector<int>& v, int lo = 0, int hi = -1) {
-    if (hi < 0) hi = v.size()-1;
+    if (hi < 0) hi = v.size()-1; // if called by user
     if (lo >= hi) return;
     int mid = (lo+hi)/2;
     merge_sort(v, lo, mid);
