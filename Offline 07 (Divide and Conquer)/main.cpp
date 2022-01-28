@@ -1,33 +1,63 @@
 #include<iostream>
+#include<ctime>
+#include<algorithm>
 #include "insertion_sort.h"
 #include "merge_sort.h"
 #include "quicksort.h"
 
 using namespace std;
 
-void print_vector(vector<int>& v) {
-    int n = v.size();
-    for (int i = 0; i <  n; i++) cout << v[i] << ' ';
-    cout << '\n';
-}
-
 int main() {
     srand(1);
-    int n = 100000;
-
-    for (int i = 0; i < 5; i++) {
-        vector<int> v(n);
-        for (int j = 0; j < n; j++) {
-            v[j] = rand();
-//            v[j] = 23;
+    int n[] = {5, 10, 100, 1000, 10000, 100000};
+    cout << ",Time required in ms,,,,,,\n";
+    cout << "n,Merge Sort,Quicksort,Randomized Quicksort,Insertion Sort,Quicksort with Sorted Imput,Randomized Quicksort with Sorted Imput,STL sort() function\n";
+    for (int i = 0; i < 6; i++) {
+        cout << n[i];
+        vector<int> a(n[i]);
+        for (int j = 0; j < n[i]; j++) {
+            a[j] = rand();
         }
-//        v[2] = v[9] = 17;
-//        print_vector(v);
-//        insertion_sort(v);
-        merge_sort(v);
-//        quicksort(v, false);
-//        print_vector(v);
-//        cout << '\n';
+        vector<int> b = a;
+        clock_t start = clock();
+        merge_sort(b);
+        double time = (double)(clock() - start) / CLOCKS_PER_SEC;
+        cout << ',' << time;
+
+        b = a;
+        start = clock();
+        quicksort(b, false);
+        time = (double)(clock() - start) / CLOCKS_PER_SEC;
+        cout << ',' << time;
+
+        b = a;
+        start = clock();
+        quicksort(b);
+        time = (double)(clock() - start) / CLOCKS_PER_SEC;
+        cout << ',' << time;
+
+        b = a;
+        start = clock();
+        insertion_sort(b);
+        time = (double)(clock() - start) / CLOCKS_PER_SEC;
+        cout << ',' << time;
+
+        start = clock();
+        quicksort(b, false);
+        time = (double)(clock() - start) / CLOCKS_PER_SEC;
+        cout << ',' << time;
+
+        start = clock();
+        quicksort(b);
+        time = (double)(clock() - start) / CLOCKS_PER_SEC;
+        cout << ',' << time;
+
+        b = a;
+        start = clock();
+        sort(b.begin(), b.end());
+        time = (double)(clock() - start) / CLOCKS_PER_SEC;
+        cout << ',' << time;
+        cout << '\n';
     }
     return 0;
 }
