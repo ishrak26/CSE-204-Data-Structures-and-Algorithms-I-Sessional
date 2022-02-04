@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int partition(int *arr, int lo, int hi) {
+int partition(long long *arr, int lo, int hi) {
     int idx = rand() % (hi-lo+1) + lo;
     swap(arr[idx], arr[hi]);
     int i = lo-1;
@@ -15,7 +15,7 @@ int partition(int *arr, int lo, int hi) {
     return i;
 }
 
-void quicksort_descending(int *arr, int lo, int hi) {
+void quicksort_descending(long long *arr, int lo, int hi) {
     if (lo >= hi) return;
     int mid = partition(arr, lo, hi);
     quicksort_descending(arr, lo, mid-1);
