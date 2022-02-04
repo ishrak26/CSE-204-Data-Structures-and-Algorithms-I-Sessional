@@ -4,6 +4,14 @@
 
 using namespace std;
 
+long long compute_min_cost(long long *arr, int n, int k) {
+    long long cost = 0;
+    for (int i = 0; i < n; i++) {
+        cost += (i/k + 1) * arr[i];
+    }
+    return cost;
+}
+
 int main() {
     int n, k;
     cin >> n >> k;
@@ -11,10 +19,7 @@ int main() {
     for (int i = 0; i < n; i++) cin >> plants[i];
 //    sort(plants, plants+n, greater<long long>());
     quicksort_descending(plants, 0, n-1);
-    long long cost = 0;
-    for (int i = 0; i < n; i++) {
-        cost += (i/k + 1) * plants[i];
-    }
+    long long cost = compute_min_cost(plants, n, k);
     delete[] plants;
     cout << cost << '\n';
     return 0;
