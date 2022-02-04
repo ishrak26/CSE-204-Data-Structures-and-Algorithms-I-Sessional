@@ -2,6 +2,9 @@
 
 using namespace std;
 
+// partitions the arr in the range lo to hi in two parts
+// left part is greater than or equal to
+// right part is less than
 int partition(long long *arr, int lo, int hi) {
     int idx = rand() % (hi-lo+1) + lo;
     swap(arr[idx], arr[hi]);
@@ -15,6 +18,7 @@ int partition(long long *arr, int lo, int hi) {
     return i;
 }
 
+// sorts arr in descending order in the range lo to hi
 void quicksort_descending(long long *arr, int lo, int hi) {
     if (lo >= hi) return;
     int mid = partition(arr, lo, hi);
