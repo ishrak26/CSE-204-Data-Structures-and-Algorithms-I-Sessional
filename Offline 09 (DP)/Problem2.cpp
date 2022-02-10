@@ -32,6 +32,26 @@ int find_min_cost(int n, vector<vector<int>>& dp, const vector<vector<int>>& v) 
     return min_cost;
 }
 
+void backtrack(const vector<vector<int>>& dp, int n) {
+    int mask = 0;
+    for (int i = 0; i < n; i++) {
+        int mi = 1<<30;
+        int idx = -1;
+        for (int j = 0; j < n; j++) {
+            if (mask & (1<<j)) continue;
+            if (dp[j][mask | (1<<j)] < mi) {
+                mi = dp[j][mask | (1<<j)];
+                idx = j;
+            }
+        }
+        assert(idx != -1);
+        if (i > 0) cout << "-> ";
+        cout << idx+1 << ' ';
+        mask |= (1<<idx);
+    }
+    cout << '\n';
+}
+
 int main() {
     int n;
     cin >> n;
@@ -44,5 +64,7 @@ int main() {
     // dp[i][j] implies remaining cost to visit all cities starting from i-th city with given state j
     int cost = find_min_cost(n, dp, v);
     cout << cost << '\n';
+
+    // backtrack(dp, n);
     return 0;
 }
