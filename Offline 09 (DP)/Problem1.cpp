@@ -4,6 +4,8 @@
 
 using namespace std;
 
+// computes the length of the longest common subsequence
+// string a vertically in dp table, string b horizontally
 int LCS(vector<vector<int>>& dp, int m, int n, const string &a, const string &b) {
     for (int i = 0; i <= m; i++)
         dp[i][0] = 0;
@@ -20,6 +22,7 @@ int LCS(vector<vector<int>>& dp, int m, int n, const string &a, const string &b)
     return dp[m][n];
 }
 
+// finds the first LCS present in string a
 string backtrack(const vector<vector<int>>& dp, int i, int j, const string &a, const string &b) {
     if (i == 0 || j == 0)
         return "\0";
@@ -38,10 +41,11 @@ int main() {
     int m = a.length();
     int n = b.length();
 
-    a = '0' + a; // to make the string 1-indexed
+    a = '0' + a; // make the string 1-indexed for ease of computation
     b = '0' + b;
 
     vector<vector<int>> dp(m+1, vector<int> (n+1));
+
     int lcs_len = LCS(dp, m, n, a, b);
     string str = backtrack(dp, m, n, a, b);
 
