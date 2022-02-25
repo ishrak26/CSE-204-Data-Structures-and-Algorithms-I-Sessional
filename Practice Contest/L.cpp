@@ -21,23 +21,17 @@ typedef vector<pll> vpll;
 // const ld PI = acos(-1.0);
 // const ll MOD = 1000000007;
 
-int dp[SZ];
+ll dp[SZ], a[SZ];
 
 void solve(int t) {
-    string s;
-    cin >> s;
-    int n = s.length();
-    s = '0' + s;
-    for (int i = 2; i <= n; i++) {
-        dp[i] = s[i]==s[i-1] ? dp[i-1]+1 : dp[i-1];
+    int n;
+    cin >> n;
+    for (int i = 1; i <= n; i++) cin >> a[i];
+    dp[2] = abs(a[2]-a[1]);
+    for (int i = 3; i <= n; i++) {
+        dp[i] = min(dp[i-1] + abs(a[i]-a[i-1]), dp[i-2] + abs(a[i]-a[i-2]));
     }
-    int q;
-    cin >> q;
-    while (q--) {
-        int l, r;
-        cin >> l >> r;
-        cout << dp[r] - dp[l] << '\n';
-    }
+    cout << dp[n] << '\n';
 }
 
 int main() {

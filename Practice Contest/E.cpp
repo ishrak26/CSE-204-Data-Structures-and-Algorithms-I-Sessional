@@ -21,63 +21,56 @@ typedef vector<pll> vpll;
 // const ld PI = acos(-1.0);
 // const ll MOD = 1000000007;
 
-void solve(int t) {
-    int n;
-    cin >> n;
-    int ma = -1;
-    int idx = -1;
-    for (int i = 0; i < n; i++) {
-        int foo;
-        cin >> foo;
-        if (foo > ma) {
-            ma = foo;
-            idx = i;
-        }
-    }
-    int m;
-    cin >> m;
+void solve(int n, int m) {
     vector<vi> G(n);
-    vp edge(m);
+    vp e(m);
     vi cost(m);
+    int curr = 0;
     for (int i = 0; i < m; i++) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        u--;
-        v--;
-        cost[i] = w;
-        edge[i] = {u, v};
+        int u, v, c;
+        cin >> u >> v >> c;
+        curr += c;
         G[u].PB(i);
+        G[v].PB(i);
+        e[i] = {u, v};
+        cost[i] = c;
     }
-
     priority_queue<pii, vp, greater<pii>> pq;
     vector<bool> mark(n, 0);
-    mark[idx] = 1;
-    for (int x : G[idx]) pq.push({cost[x], x});
-    int cnt = 1, mst = 0;
+    mark[0] = 1;
+    for (int edge : G[0]) {
+        pq.push({cost[edge], edge});
+    }
+    int cnt = 1;
+    int mst = 0;
     while (!pq.empty()) {
         pii p = pq.top();
         pq.pop();
-        pii e = edge[p.second];
-        assert(mark[e.first]);
-        if (mark[e.second]) continue;
-        mst += p.first;
-        mark[e.second] = 1;
+        int u = e[p.second].first;
+        int v = e[p.second].second;
+        if (mark[u] && mark[v]) continue;
         cnt++;
+        mst += p.first;
         if (cnt == n) break;
-        for (int x : G[e.second]) pq.push({cost[x], x});
+        if (!mark[v]) {
+            u = v;
+        }
+        mark[u] = 1;
+        for (int edge : G[u]) {
+            if (edge == p.second) continue;
+            pq.push({cost[edge], edge});
+        }
     }
-    if (cnt < n) mst = -1;
-    cout << mst << '\n';
+    cout << curr - mst << '\n';
 }
 
 int main() {
     FASTIO;
-    int tc;
-    tc = 1;
-//    cin >> tc;
-    for (int tt = 1; tt <= tc; tt++)
-    {
-        solve(tt);
+    while (1) {
+        int n, m;
+        cin >> n >> m;
+        if (n == 0 && m == 0) break;
+        solve(n, m);
     }
     return 0;
 }

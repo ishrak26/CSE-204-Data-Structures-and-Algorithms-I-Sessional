@@ -7,7 +7,7 @@ using namespace std;
     cin.tie(0)
 #define PB push_back
 
-#define SZ 100005
+#define SZ 2005
 
 typedef long long ll;
 typedef long double ld;
@@ -21,24 +21,36 @@ typedef vector<pll> vpll;
 // const ld PI = acos(-1.0);
 // const ll MOD = 1000000007;
 
-ll dp[SZ], a[SZ];
+int dp[SZ][SZ];
+
+int func(const string &a, const string &b, int m, int n) {
+    for (int j = 0; j <= n; j++) dp[0][j] = j;
+    for (int i = 1; i <= m; i++) dp[i][0] = i;
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + 1;
+            if (a[i] == b[j]) dp[i][j] = min(dp[i][j], dp[i-1][j-1]);
+            else dp[i][j] = min(dp[i][j], dp[i-1][j-1]+1);
+        }
+    }
+    return dp[m][n];
+}
 
 void solve(int t) {
-    int n;
-    cin >> n;
-    for (int i = 1; i <= n; i++) cin >> a[i];
-    dp[2] = abs(a[2]-a[1]);
-    for (int i = 3; i <= n; i++) {
-        dp[i] = min(dp[i-1] + abs(a[i]-a[i-1]), dp[i-2] + abs(a[i]-a[i-2]));
-    }
-    cout << dp[n] << '\n';
+    string a, b;
+    cin >> a >> b;
+    a = '0' + a;
+    b = '0' + b;
+    int m = a.length();
+    int n = b.length();
+    cout << func(a, b, m, n) << '\n';
 }
 
 int main() {
     FASTIO;
     int tc;
-    tc = 1;
-//    cin >> tc;
+//    tc = 1;
+    cin >> tc;
     for (int tt = 1; tt <= tc; tt++)
     {
         solve(tt);

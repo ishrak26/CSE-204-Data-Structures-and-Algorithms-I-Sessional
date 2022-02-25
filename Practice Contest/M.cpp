@@ -7,7 +7,7 @@ using namespace std;
     cin.tie(0)
 #define PB push_back
 
-#define SZ 105
+#define SZ 100005
 
 typedef long long ll;
 typedef long double ld;
@@ -21,33 +21,23 @@ typedef vector<pll> vpll;
 // const ld PI = acos(-1.0);
 // const ll MOD = 1000000007;
 
-int c[SZ], n;
-
-int calc_one(int l, int r) {
-    if (l > r) return 0;
-    return c[r] - c[l-1];
-}
-
-int calc_zero(int l, int r) {
-    if (l > r) return 0;
-    return (r-l+1) - calc_one(l, r);
-}
+int dp[SZ];
 
 void solve(int t) {
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        int a;
-        cin >> a;
-        c[i] = c[i-1];
-        if (a == 1) c[i]++;
+    string s;
+    cin >> s;
+    int n = s.length();
+    s = '0' + s;
+    for (int i = 2; i <= n; i++) {
+        dp[i] = s[i]==s[i-1] ? dp[i-1]+1 : dp[i-1];
     }
-    int ma = -1;
-    for (int i = 1; i <= n; i++) {
-        for (int j = i; j <= n; j++) {
-            ma = max(ma, calc_one(1, i-1) + calc_zero(i, j) + calc_one(j+1, n));
-        }
+    int q;
+    cin >> q;
+    while (q--) {
+        int l, r;
+        cin >> l >> r;
+        cout << dp[r] - dp[l] << '\n';
     }
-    cout << ma << '\n';
 }
 
 int main() {

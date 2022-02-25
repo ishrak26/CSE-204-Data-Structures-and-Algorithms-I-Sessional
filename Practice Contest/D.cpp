@@ -21,56 +21,125 @@ typedef vector<pll> vpll;
 // const ld PI = acos(-1.0);
 // const ll MOD = 1000000007;
 
-void solve(int n, int m) {
-    vector<vi> G(n);
-    vp e(m);
-    vi cost(m);
-    int curr = 0;
-    for (int i = 0; i < m; i++) {
-        int u, v, c;
-        cin >> u >> v >> c;
-        curr += c;
-        G[u].PB(i);
-        G[v].PB(i);
-        e[i] = {u, v};
-        cost[i] = c;
+struct Point {
+    int idx;
+    ld x;
+    ld y;
+};
+
+bool comp_x(Point a, Point b) {
+    return a.x < b.x;
+}
+
+bool comp_y(Point a, Point b) {
+    return a.y < b.y;
+}
+
+ld calc_distance(const Point &a, const Point &b) {
+    return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+}
+
+vector<Point> a;
+
+pii solve(int lo, int hi) {
+    int n = hi-lo+1;
+    assert(n >= 2);
+    if (n == 2) return {lo, hi};
+    if (n == 3) {
+        ld dis1, dis2, dis3;
+        dis1 = calc_distance(a[lo], a[lo+1]);
+        dis2 = calc_distance(a[lo+1], a[hi]);
+        dis3 = calc_distance(a[lo], a[hi]);
+        if (dis1 < dis2 && dis1 < dis3) return {lo, lo+1};
+        else if (dis2 < dis3 && dis2 < dis1) return {lo+1, hi};
+        return {lo, hi};
     }
-    priority_queue<pii, vp, greater<pii>> pq;
-    vector<bool> mark(n, 0);
-    mark[0] = 1;
-    for (int edge : G[0]) {
-        pq.push({cost[edge], edge});
+    int mid = (lo+hi)/2;
+    pii p1 = solve(lo, mid);
+    pii p2 = solve(mid+1, hi);
+    ld d1 = calc_distance(a[p1.first], a[p1.second]);
+    ld d2 = calc_distance(a[p2.first], a[p2.second]);
+    pii p;
+    ld d;
+    if (d1 < d2) {
+        d = d1;
+        p = p1;
     }
-    int cnt = 1;
-    int mst = 0;
-    while (!pq.empty()) {
-        pii p = pq.top();
-        pq.pop();
-        int u = e[p.second].first;
-        int v = e[p.second].second;
-        if (mark[u] && mark[v]) continue;
-        cnt++;
-        mst += p.first;
-        if (cnt == n) break;
-        if (!mark[v]) {
-            u = v;
+    else {
+        d = d2;
+        p = p2;
+    }
+
+    // strip distance calculation
+    int left = hi+1, right = hi+1;
+    for (int i = lo; i <= mid; i++) {
+        if (a[i].x >= a[mid].x-d) {
+            left = i;
+            break;
         }
-        mark[u] = 1;
-        for (int edge : G[u]) {
-            if (edge == p.second) continue;
-            pq.push({cost[edge], edge});
+    }
+    for (int i = mid+1; i <= hi; i++) {
+        if (a[i].x > a[mid].x+d) {
+            right = i;
+            break;
         }
     }
-    cout << curr - mst << '\n';
+    vector<Point> v;
+    for (int i = left; i < right; i++) v.PB(a[i]);
+    sort(v.begin(), v.end(), comp_y);
+    pii p3;
+    ld d3 = 1e9;
+    for (int i = 0, sz = v.size(); i < sz; i++) {
+        for (int j = i+1; j <= i+7 && j < sz; j++) {
+            ld dis = calc_distance(v[i], v[j]);
+            if (dis < d3) {
+                d3 = dis;
+                p3 = {i, j};
+            }
+        }
+    }
+    if (d3 < d) {
+        // find indices for vector a to update p
+        bool flag1 = 1, flag2 = 1;
+        for (int i = left; (flag1 || flag2) && i < right; i++) {
+            if (flag1 && v[p3.first].idx == a[i].idx) {
+                p.first = i;
+                flag1 = 0;
+                continue;
+            }
+            if (flag2 && v[p3.second].idx == a[i].idx) {
+                p.second = i;
+                flag2 = 0;
+            }
+        }
+        assert(!(flag1 || flag2));
+    }
+    return p;
+}
+
+void solve(int t) {
+    int n;
+    cin >> n;
+    a.resize(n);
+    for (int i = 0; i < n; i++) {
+        a[i].idx = i;
+        cin >> a[i].x >> a[i].y;
+    }
+    sort(a.begin(), a.end(), comp_x);
+    pii p = solve(0, n-1);
+    ld dis = calc_distance(a[p.first], a[p.second]);
+    cout << min(a[p.first].idx, a[p.second].idx) << ' ' << max(a[p.first].idx, a[p.second].idx) << ' ';
+    cout << fixed << setprecision(6) << round(dis * 1e6) / 1e6 << '\n';
 }
 
 int main() {
     FASTIO;
-    while (1) {
-        int n, m;
-        cin >> n >> m;
-        if (n == 0 && m == 0) break;
-        solve(n, m);
+    int tc;
+    tc = 1;
+//    cin >> tc;
+    for (int tt = 1; tt <= tc; tt++)
+    {
+        solve(tt);
     }
     return 0;
 }

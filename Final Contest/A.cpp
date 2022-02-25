@@ -24,14 +24,30 @@ typedef vector<pll> vpll;
 void solve(int t) {
     int n;
     cin >> n;
-    vpll v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
-    sort(v.begin(), v.end());
-    ll ans = 0;
+    set<int> s;
+    vi v(n);
     for (int i = 0; i < n; i++) {
-        ans += v[i].second - (n-i) * v[i].first;
+        cin >> v[i];
     }
-    cout << ans << '\n';
+    int cnt = 0;
+    set<int>::iterator it;
+    for (int i = 0; i < n; i++) {
+        if (s.empty()) {
+            cnt++;
+            s.insert(v[i]);
+        }
+        else {
+            it = s.find(v[i]-1);
+            if (it == s.end()) {
+                cnt++;
+                s.insert(v[i]);
+            }
+            else {
+                s.insert(v[i]);
+            }
+        }
+    }
+    cout << cnt << '\n';
 }
 
 int main() {
@@ -45,3 +61,9 @@ int main() {
     }
     return 0;
 }
+
+/*
+3
+1 3 2
+--> 2
+*/
